@@ -34,7 +34,7 @@ public class MascotaController {
         return ResponseEntity.ok(mascotaActualizada);
     }
 
-    @PreAuthorize("hasAuthority('GERENTE')") // Solo gerente puede eliminar el registro de una mascota.
+    @PreAuthorize("hasAuthority('ADMIN')") // Solo gerente puede eliminar el registro de una mascota.
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarMascota(@PathVariable Long id) {
         mascotaService.eliminarMascota(id);

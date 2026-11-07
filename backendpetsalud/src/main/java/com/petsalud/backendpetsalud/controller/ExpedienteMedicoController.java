@@ -37,7 +37,7 @@ public class ExpedienteMedicoController {
         return ResponseEntity.ok(registros);
     }
 
-    @PreAuthorize("hasAuthority('GERENTE')") // Solo gerente puede eliminar el expediente medico.
+    @PreAuthorize("hasAuthority('ADMIN')") // Solo gerente puede eliminar el expediente medico.
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarRegistro(@PathVariable Long id) {
         expedienteMedicoService.eliminarRegistro(id);

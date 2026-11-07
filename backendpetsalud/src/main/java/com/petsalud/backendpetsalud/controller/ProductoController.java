@@ -15,7 +15,7 @@ public class ProductoController {
     @Autowired
     private ProductoService productoService;
 
-    @PreAuthorize("hasAuthority('GERENTE')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<Producto> agregarProducto(@RequestBody Producto producto) {
         Producto nuevoProducto = productoService.agregarProducto(producto);
@@ -29,14 +29,14 @@ public class ProductoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasAuthority('GERENTE')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Producto> actualizarProducto(@PathVariable Long id, @RequestBody Producto producto) {
         Producto productoActualizado = productoService.actualizarProducto(id, producto);
         return ResponseEntity.ok(productoActualizado);
     }
 
-    @PreAuthorize("hasAuthority('GERENTE')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
         productoService.eliminarProducto(id);

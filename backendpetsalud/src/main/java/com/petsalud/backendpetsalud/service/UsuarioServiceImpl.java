@@ -22,6 +22,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+        @Override
+    public Usuario crearUsuarioE(RegistroUsuarioDato registroUsuarioDato, Rol rol) {
+        
+        throw new UnsupportedOperationException("Unimplemented method 'crearUsuarioE'");
+    }
+
     @Override
     public Usuario registrarUsuario(RegistroUsuarioDato registroUsuarioDato) {
         // Verificar si el email ya está registrado
@@ -44,6 +50,19 @@ public class UsuarioServiceImpl implements UsuarioService {
         // Se asigna rol por defecto para que no lo puedan alterar sin permisos
         usuario.setRol(Rol.CLIENTE);
 
+        // Se guarda en la base de datos
+        return usuarioRepository.save(usuario);
+    }
+
+    // Crea el usuario Empleado
+    public Usuario crearUsuarioEmpleado(RegistroUsuarioDato registroUsuarioDato, Rol rol) {
+    Usuario usuario = new Usuario();
+    usuario.setNombre(registroUsuarioDato.getNombre());
+    usuario.setApellido(registroUsuarioDato.getApellido());
+    usuario.setEmail(registroUsuarioDato.getEmail());
+    usuario.setPassword(passwordEncoder.encode(registroUsuarioDato.getPassword())); // Encripta la contraseña
+    usuario.setRol(rol); // Asigna el rol de empleado
+    
         // Se guarda en la base de datos
         return usuarioRepository.save(usuario);
     }
