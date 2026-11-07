@@ -38,8 +38,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/usuarios/registro", "/api/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll() // Consultar productos publico
-                        .requestMatchers("/api/notificaciones/**", "/api/recompensas/**", "/api/usuarios/**").hasAuthority(Rol.ADMIN.name()) // Se traen los roles usando enum
-                        .requestMatchers("/api/citas/**", "/api/expedientes**", "/api/mascotas**", "/api/productos**", "/api/ventas/**").hasAnyAuthority(Rol.VETERINARIO.name(), Rol.ADMIN.name())
+                        .requestMatchers("/api/gerente/**", "/api/notificaciones/**", "/api/recompensas/**", "/api/usuarios/**").hasAuthority(Rol.ADMIN.name()) // Se traen los roles usando enum
+                        .requestMatchers( "/api/citas/**", "/api/expedientes**", "/api/mascotas**", "/api/productos**", "/api/ventas/**").hasAnyAuthority(Rol.VETERINARIO.name(), Rol.ADMIN.name())
                         .requestMatchers(HttpMethod.POST,"/api/citas", "/api/mascotas/propietario/{propietarioId}").hasAuthority(Rol.CLIENTE.name()) // Agenda citas, 
                         .requestMatchers(HttpMethod.GET, "/api/recompensas/usuario/{usuarioId}").hasAuthority(Rol.CLIENTE.name()) // Para que el cliente pueda ver las recompensas que tiene.
                         .requestMatchers(HttpMethod.DELETE,"/api/citas/{id}").hasAuthority(Rol.CLIENTE.name()) // Cancela citas,
