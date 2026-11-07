@@ -1,9 +1,12 @@
 package com.petsalud.backendpetsalud.service;
 
+import com.petsalud.backendpetsalud.dto.RegistroUsuarioDato;
+import com.petsalud.backendpetsalud.entity.Rol;
 import com.petsalud.backendpetsalud.entity.Usuario;
 import com.petsalud.backendpetsalud.repository.UsuarioRepository;
 import com.petsalud.backendpetsalud.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,13 +18,33 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    //Inyeccion de encriptador de contraseña
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
-    public Usuario registrarUsuario(Usuario usuario) {
+    public Usuario registrarUsuario(RegistroUsuarioDato registroUsuarioDato) {
         // Verificar si el email ya está registrado
-        Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(usuario.getEmail());
+        Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(registroUsuarioDato.getEmail());
         if (usuarioExistente.isPresent()) {
             throw new IllegalArgumentException("El email ya está registrado");
         }
+
+        Usuario usuario = new Usuario();
+        usuario.setEmail(registroUsuarioDato.getEmail());
+
+        // Se encripta la contraseña 
+        usuario.setPassword(passwordEncoder.encode(registroUsuarioDato.getPassword()));
+
+        usuario.setNombre(registroUsuarioDato.getNombre());
+        usuario.setApellido(registroUsuarioDato.getApellido());
+        usuario.setTelefono(registroUsuarioDato.getTelefono());
+        usuario.setDireccion(registroUsuarioDato.getDireccion());
+
+        // Se asigna rol por defecto para que no lo puedan alterar sin permisos
+        usuario.setRol(Rol.CLIENTE);
+
+        // Se guarda en la base de datos
         return usuarioRepository.save(usuario);
     }
 

@@ -4,6 +4,7 @@ import com.petsalud.backendpetsalud.entity.Mascota;
 import com.petsalud.backendpetsalud.service.MascotaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class MascotaController {
         return ResponseEntity.ok(mascotaActualizada);
     }
 
+    @PreAuthorize("hasAuthority('GERENTE')") // Solo gerente puede eliminar el registro de una mascota.
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarMascota(@PathVariable Long id) {
         mascotaService.eliminarMascota(id);

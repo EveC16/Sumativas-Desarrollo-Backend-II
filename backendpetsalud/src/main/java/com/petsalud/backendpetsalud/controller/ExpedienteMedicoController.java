@@ -4,6 +4,7 @@ import com.petsalud.backendpetsalud.entity.ExpedienteMedico;
 import com.petsalud.backendpetsalud.service.ExpedienteMedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class ExpedienteMedicoController {
         return ResponseEntity.ok(registros);
     }
 
+    @PreAuthorize("hasAuthority('GERENTE')") // Solo gerente puede eliminar el expediente medico.
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarRegistro(@PathVariable Long id) {
         expedienteMedicoService.eliminarRegistro(id);

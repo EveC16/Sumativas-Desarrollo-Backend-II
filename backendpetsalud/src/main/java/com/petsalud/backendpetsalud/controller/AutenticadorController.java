@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.petsalud.backendpetsalud.dto.RegistroUsuarioDato;
 import com.petsalud.backendpetsalud.security.JwtService;
+import com.petsalud.backendpetsalud.service.UsuarioService;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -24,11 +26,25 @@ public class AutenticadorController {
 
     private final AuthenticationManager authManager;
     private final JwtService jwtService;
+    private final UsuarioService usuarioService;
     
     // Inyeción de las dependencias de autenticación.
-    public AutenticadorController(AuthenticationManager authManager, JwtService jwtService) {
+    public AutenticadorController(AuthenticationManager authManager, JwtService jwtService, UsuarioService usuarioService) {
         this.authManager = authManager;
         this.jwtService = jwtService;
+        this.usuarioService = usuarioService;
+    }
+
+    // Registro con RegistroUsuarioDato
+    @PostMapping("/register")
+    public ResponseEntity<?> registrar(@Valid @RequestBody RegistroUsuarioDato registroUsuarioDato) {
+        try {
+            usuarioService.registrarUsuario(registroUsuarioDato);
+            return ResponseEntity.status(201).body(Map.of("mensaje", "Usuario registrado exitosamente"));
+        } catch (IllegalArgumentException e) {
+            // Captura si el email ya existe
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
     }
 
     // Valida credenciales sin devolverlas al consumidor.
